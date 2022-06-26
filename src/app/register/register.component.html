@@ -1,0 +1,362 @@
+<mat-toolbar class="rtl">
+    <span>ثبت نام</span>
+  </mat-toolbar>
+  <mat-card class="my-card">
+   <form class="my-form" [formGroup]="registerForm" (ngSubmit)="register()">
+     <mat-card-content>
+
+        <mat-form-field class="full-width rtl">
+            <mat-label>رابطه</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="relation" required (selectionChange)="relationChange($event)">
+                    <mat-option [value]="1">خودم</mat-option>
+                    <mat-option [value]="2">همسرم</mat-option>
+                    <mat-option [value]="2">فرزند</mat-option>
+                    <mat-option [value]="2">والدین</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+        <mat-form-field class="full-width rtl">
+            <mat-label>معرف</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="agentId" required>
+                    <mat-option *ngFor="let val of agents" [value]="val.id">
+                        {{val.name}}
+                    </mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>نام</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="fName" required>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>نام خانوادگی</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="lName" required>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>کد ملی</mat-label>
+            <div class="form-group">
+                <input  matInput class="form-control ltr" formControlName="nID" required >
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>نام پدر</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="pName" required >
+            </div>
+         </mat-form-field>
+         
+         <!-- <mat-form-field class="full-width">
+            <mat-label>تاريخ تولد</mat-label>
+            <div class="form-group">
+                <input mask="yyyy-mm-dd"  type="date" matInput class="form-control" formControlName="bDate" required>
+            </div>
+         </mat-form-field> -->
+
+         <mat-form-field  class="rtl">
+            <mat-label>تاريخ تولد</mat-label>
+            <input  class="ltr" matInput [matDatepicker]="simplePicker" mask="yyyy/mm/dd" placeholder="----/--/--" formControlName="bDate">
+            <!-- <mat-datepicker-toggle matSuffix [for]="simplePicker"></mat-datepicker-toggle> -->
+            <mat-datepicker #simplePicker> </mat-datepicker>
+          </mat-form-field>
+          <br>
+         <mat-form-field class="rtl">
+            <mat-label>جنسیت</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="gender" required (selectionChange)="genderChange($event)">
+                    <mat-option [value]="1">مرد</mat-option>
+                    <mat-option [value]="2">زن</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+         <br>
+
+         <div class="rtl" *ngIf="this.gender == 1">متقاضی محترم! دریافت گذرنامه صرفاً بخش اول کار است، بسیاری از افراد تصور می کنند با دریافت گذرنامه مشکلی برای خروج از کشور ندارند و حال آنکه اینطور نیست و بحث دریافت گذرنامه و اجازه ی خروج از کشور دو مقوله ی جدا از هم است لذا خواهشمندیم پیگیر مجوز خروج از کشور خود از مجاری قانونی باشید.</div>
+         <div *ngIf="this.gender == 1" class="rtl">
+            <mat-label>کارت پایان خدمت</mat-label>
+            <div class="form-group">
+                <button type="button" mat-raised-button (click)="fileInput.click()">انتخاب فایل</button>
+                <input hidden (change)="onSolFileSelected($event)" #fileInput type="file" id="solFile">
+            </div>
+            <img *ngIf="this.solFileName.length > 0" src="http://localhost:3000/{{ solFileName }}" style="width: 100px;">
+         </div>
+         <br>
+
+         <mat-form-field class="rtl">
+            <mat-label>تاهل</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="married" required>
+                    <mat-option [value]="1">مجرد</mat-option>
+                    <mat-option [value]="2">متاهل</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field><br>
+
+        <div class="rtl">
+        <mat-label>کارت واکسن</mat-label>
+        <div class="form-group">
+            <button type="button" mat-raised-button (click)="fileInput.click()">انتخاب فایل</button>
+            <input hidden (change)="onVacFileSelected($event)" #fileInput type="file" id="vacFile">
+        </div>
+        <img *ngIf="this.vacFileName.length > 0" src="http://localhost:3000/{{ vacFileName }}" style="width: 100px;">
+        </div>
+
+         <br>
+         <mat-form-field class="full-width rtl">
+            <mat-label>گذرنامه</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="hasPass" required (selectionChange)="passChange($event)">
+                    <mat-option [value]="1">دارم</mat-option>
+                    <mat-option [value]="2">ندارم</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.hasPass">
+            <mat-label>تاريخ اعتبار گذرنامه</mat-label>
+            <div class="form-group">
+                <input type="date" matInput class="form-control" formControlName="pDate" required>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.hasPass">
+            <mat-label>شماره گذرنامه</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="pID" required>
+            </div>
+         </mat-form-field>
+
+         <div *ngIf="this.hasPass" class="rtl">
+            <mat-label>تصویر گذرنامه</mat-label>
+            <div class="form-group">
+                <button type="button" mat-raised-button (click)="fileInput.click()">انتخاب فایل</button>
+                <input hidden (change)="onPassFileSelected($event)" #fileInput type="file" id="passFile">
+            </div>
+            <img *ngIf="this.passFileName.length > 0" src="http://localhost:3000/{{ passFileName }}" style="width: 100px;">
+         </div>
+         <br>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>مذهب</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="religion" required>
+                    <mat-option [value]="1">شیعه اثنی عشری</mat-option>
+                    <mat-option [value]="2">غیر شیعه</mat-option>
+                    <mat-option [value]="2">سایر مذاهب</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>آدرس</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="adr" required>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>کد پستی</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="postalCode" required>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>مرز خروجی</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="border" required>
+                    <mat-option [value]="1">مهران</mat-option>
+                    <mat-option [value]="2">شلمچه</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>وضعیت جسمانی</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="health" required (selectionChange)="healthChange($event)">
+                    <mat-option [value]="1">سالم</mat-option>
+                    <mat-option [value]="2">دارای مشکل</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+         <div class="rtl" *ngIf="!this.health rtl">لطفاً  بیماری خاص یا معلولیت جسمی خود را به صورت کامل و تشریحاً توضیح دهید</div>
+         <mat-form-field class="full-width" *ngIf="!this.health">
+            <mat-label>مشکل جسمانی</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="healthDesc" required>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>تحصیلات</mat-label>
+            <div class="form-group">
+                <mat-select formControlName="education" required>
+                    <mat-option [value]="1">بی سواد</mat-option>
+                    <mat-option [value]="2">ابتدایی</mat-option>
+                    <mat-option [value]="3">سیکل</mat-option>
+                    <mat-option [value]="4">دیپلم</mat-option>
+                    <mat-option [value]="5">فوق دیپلم</mat-option>
+                    <mat-option [value]="6">کارشناسی</mat-option>
+                    <mat-option [value]="7">کارشناسی ارشد</mat-option>
+                    <mat-option [value]="8">دکتری</mat-option>
+                    <mat-option [value]="9">پایان سطح یک حوزوی</mat-option>
+                    <mat-option [value]="10">پایان سطح دو حوزوی</mat-option>
+                    <mat-option [value]="11">پایان سطح سه  حوزوی</mat-option>
+                    <mat-option [value]="12">پایان درس خارج فقه و اصول</mat-option>
+                </mat-select>
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>شغل</mat-label>
+            <mat-select formControlName="job" required>
+                <mat-option [value]="1">بیکار</mat-option>
+                <mat-option [value]="2">کشاورز</mat-option>
+                <mat-option [value]="3">دامدار</mat-option>
+                <mat-option [value]="4">خانه دار</mat-option>
+                <mat-option [value]="5">طلبه</mat-option>
+                <mat-option [value]="6">دانشجو</mat-option>
+                <mat-option [value]="7">کارمند</mat-option>
+                <mat-option [value]="8">آزاد</mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>توضیح شغل</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="jobDesc">
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>تحت پوشش نهاد های حمایتی</mat-label>
+            <mat-select formControlName="support" required>
+                <mat-option [value]="1">هستم</mat-option>
+                <mat-option [value]="2">نیستم</mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>منبع درآمد</mat-label>
+            <mat-select formControlName="earn" required>
+                <mat-option [value]="1">صرفاً از محل دریافت یارانه</mat-option>
+                <mat-option [value]="2">صرفاً از محل دریافت یارانه ها و کمک های نهاد های حمایتی</mat-option>
+                <mat-option [value]="2">خودم شاغل هستم</mat-option>
+                <mat-option [value]="2">خودم و یک یا چند نفر از افراد  خانواده شاغل هستیم</mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>توضیحات</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="earnDesc">
+            </div>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>میزان درآمد</mat-label>
+            <mat-select formControlName="earnAmount" required>
+                <mat-option [value]="1">بین یک تا 3 میلیون تومان در ماه</mat-option>
+                <mat-option [value]="2">بین 3 تا 5 میلیون تومان در ماه</mat-option>
+                <mat-option [value]="3">بین 5  تا 7 میلیون تومان در ماه</mat-option>
+                <mat-option [value]="4">بیش از 7 میلیون تومان</mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>دارای خودروی شخصی هستم</mat-label>
+            <mat-select formControlName="agentId" required (selectionChange)="carChange($event)">
+                <mat-option [value]="1">بله</mat-option>
+                <mat-option [value]="2">خیر</mat-option>
+            </mat-select>
+         </mat-form-field>
+         <mat-form-field class="full-width rtl" *ngIf="this.mine && this.hasCar">
+            <mat-label>نوع خودرو</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="carType" required>
+            </div>
+         </mat-form-field>
+         <mat-form-field class="full-width rtl" *ngIf="this.mine && this.hasCar">
+            <mat-label>سال تولید</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control ltr" formControlName="carYear" required>
+            </div>
+         </mat-form-field>
+
+
+         <div class="rtl" *ngIf="this.mine">چنانچه با خوروی شخصی خود همراه با 3 نفر دیگر از زائرانِ منطقه ی خود،  به مرز مراجعت نموده و ازمرز به محل سکونت خود برگردید (مسیر داخل ایران) میزان مسافت شما در داخل برحسب کیلومتر سنجیده شده و هزینه ی بنزین مصرفی شما با نرخ مصرف بنزین هر 100 کیلومتر 10 لیتر و قیمت بنزین آزاد محاسبه می شود و بعلاوه ی مبلغ 300 تا 500 هزار تومان (بسته به مسافت  شما تا مرز) جهت استهلاک خودرویتان و هزینه ی پارکینگ مرز به شما تقدیم خواهد شد.
+            با این توضیح آیا تمایل به سفر با خودروی شخصی خود را دارید؟</div>
+         <mat-form-field class="full-width" *ngIf="this.mine && this.hasCar">
+            <mat-label>آیا تمایل به سفر با خودروی شخصی خود را دارید؟</mat-label>
+            <mat-select formControlName="selfTravel" required>
+                <mat-option [value]="1">بله</mat-option>
+                <mat-option [value]="2">خیر</mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field class="full-width rtl">
+            <mat-label>تاکنون به سفر عتبات عالیات مشرف شده ام</mat-label>
+            <mat-select formControlName="experienced" required (selectionChange)="exChange($event)">
+                <mat-option [value]="1">بله</mat-option>
+                <mat-option [value]="2">خیر</mat-option>
+            </mat-select>
+         </mat-form-field>
+         <mat-form-field class="full-width rtl" *ngIf="this.hasEx">
+            <mat-label>دفعات</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control ltr" formControlName="exNum" required>
+            </div>
+         </mat-form-field>
+         <mat-form-field class="full-width rtl" *ngIf="this.hasEx">
+            <mat-label>آخرین سال</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control ltr" formControlName="exLast" required>
+            </div>
+         </mat-form-field>
+
+         <div class="rtl" *ngIf="this.mine">با توجه به محدودیت منابع مالی، چنانچه برخی ازمتقاضیان بخشی از هزینه ی سفر را خودشان متحمل شوند؛ در ثواب اعزام زائران بیشتری نیز شریک خواهند بود</div>
+         <div class="rtl" *ngIf="this.mine">توانایی پرداخت بخشی از هزینه ی سفر را دارم</div>
+         <mat-form-field class="full-width rtl">
+            <mat-label>مبلغ</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control ltr" formControlName="pay" required>
+            </div>
+         </mat-form-field>
+
+         <div class="rtl" *ngIf="this.mine">توجه: شماره حساب وشناسه شبای اعلامی میبایست دقیق و حتماً به نام شخص متقاضی باشد.</div>
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>نام بانک</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control" formControlName="bank" required>
+            </div>
+         </mat-form-field>
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>شماره حساب</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control ltr" formControlName="acount" required>
+            </div>
+         </mat-form-field>
+         <mat-form-field class="full-width rtl" *ngIf="this.mine">
+            <mat-label>شناسه شبا</mat-label>
+            <div class="form-group">
+                <input matInput class="form-control ltr" formControlName="shaba" required>
+            </div>
+         </mat-form-field>
+
+
+     </mat-card-content>
+     <mat-card-actions>
+        <button mat-raised-button type="submit" color="primary" class="btn btn-block btn-primary">ثبت</button>
+     </mat-card-actions>
+   </form>
+  </mat-card>

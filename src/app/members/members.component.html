@@ -1,0 +1,73 @@
+<mat-toolbar [dir]="direction">
+    <span>فهرست اعضا</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="showIt()">مشاهده</button>
+    <button mat-raised-button color="primary" (click)="getAllMembers()">بازیابی</button>
+    <button *ngIf="this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="addUser()">افزودن</button>
+    <button *ngIf="this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="del()">حذف</button>
+    <button *ngIf="!this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="confirm()">تایید</button>
+    <button *ngIf="!this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="reject()">رد</button>
+  </mat-toolbar>
+  <mat-card class="my-card" >
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"  [dir]="direction">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>ردیف</th>
+          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="fName">
+          <th mat-header-cell *matHeaderCellDef> نام </th>
+          <td mat-cell *matCellDef="let element"> {{element.fName}} </td>
+        </ng-container>
+      
+        <!-- Weight Column -->
+        <ng-container matColumnDef="lName">
+          <th mat-header-cell *matHeaderCellDef> نام خانوادگی </th>
+          <td mat-cell *matCellDef="let element"> {{element.lName}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="agentConfirm">
+          <th mat-header-cell *matHeaderCellDef> تایید معرف </th>
+          <td mat-cell *matCellDef="let element"> {{element.agentConfirm?'بله':'خیر'}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="adminConfirm">
+            <th mat-header-cell *matHeaderCellDef> تایید مدیر </th>
+            <td mat-cell *matCellDef="let element"> {{element.adminConfirm?'بله':'خیر'}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="superAdminConfirm">
+            <th mat-header-cell *matHeaderCellDef> تایید نهایی </th>
+            <td mat-cell *matCellDef="let element"> {{element.superAdminConfirm?'بله':'خیر'}} </td>
+        </ng-container>
+            
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  </mat-card>

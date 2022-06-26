@@ -1,0 +1,16 @@
+.spacer {
+    flex: 1 1 auto;
+ }
+
+.rtl {
+  direction: rtl;
+}
+
+.mainDiv {
+  text-align: justify;
+  padding: 5%;
+  direction: rtl;
+  background-image: url(/assets/bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
