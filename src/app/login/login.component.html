@@ -5,15 +5,15 @@
    <form class="my-form" [formGroup]="signinForm" (ngSubmit)="loginUser()">
      <mat-card-content>
          <mat-form-field class="full-width">
-            <mat-label>شماره تماس</mat-label>
+            <mat-label>شماره همراه</mat-label>
             <div class="form-group">
-            <input  matInput class="form-control" placeholder="شماره تماس" formControlName="username" required>
+            <input  matInput class="form-control" placeholder="شماره همراه" formControlName="username" required>
             </div>
          </mat-form-field>
          <mat-form-field class="full-width">
-            <mat-label>کد پیامکی</mat-label>
+            <mat-label>کد ملی</mat-label>
             <div class="form-group">
-            <input matInput class="form-control" placeholder="کد پیامکی" formControlName="password">
+            <input matInput class="form-control" placeholder="کد ملی" formControlName="password" required>
          </div>
          </mat-form-field>
      </mat-card-content>
