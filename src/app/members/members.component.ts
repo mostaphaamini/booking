@@ -7,6 +7,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { Member } from '../models/member';
 import { AlertDialog, ConfirmDialog } from '../agent/agent.component';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-members',
@@ -21,7 +22,7 @@ export class MembersComponent implements OnInit {
   public direction: Direction;
   dataSource = new MatTableDataSource<Member>(this.ELEMENT_DATA);
   selection = new SelectionModel<Member>(true, []);
-  endpoint: string = 'http://localhost:3000/';
+  endpoint: string = environment.backendUrl;
   
   public constructor(
     private readonly dir: Directionality,
@@ -89,7 +90,9 @@ export class MembersComponent implements OnInit {
       if(result === true){
         let vals: number[] = []; 
         this.selection.selected.forEach((value: Member, index: number) => {
-          vals.push(value.id);
+          if(vals.indexOf(value.id) == -1){
+            vals.push(value.id);
+          }
         });
         const params = { ids: vals, status: status };
         let api = '';

@@ -1,12 +1,45 @@
 <mat-toolbar [dir]="direction">
     <span>فهرست اعضا</span>
     <span class="spacer"></span>
-    <button mat-raised-button color="primary" (click)="showIt()">مشاهده</button>
+    <!-- <button mat-raised-button color="primary" (click)="showIt()">مشاهده</button>
     <button mat-raised-button color="primary" (click)="getAllMembers()">بازیابی</button>
     <button *ngIf="this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="addUser()">افزودن</button>
     <button *ngIf="this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="del()">حذف</button>
     <button *ngIf="!this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="confirm()">تایید</button>
-    <button *ngIf="!this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="reject()">رد</button>
+    <button *ngIf="!this.authService.currentUser.isUser" mat-raised-button color="primary" (click)="reject()">رد</button> -->
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="showIt()">
+        <mat-icon>visibility</mat-icon>
+        <span>ویرایش اطلاعات</span>
+      </button>
+      <button mat-menu-item (click)="getAllMembers()">
+        <mat-icon>refresh</mat-icon>
+        <span>بازیابی</span>
+      </button>
+      <button *ngIf="this.authService.currentUser.isUser" mat-menu-item (click)="addUser()">
+        <mat-icon>person_add</mat-icon>
+        <span>افزودن</span>
+      </button>
+      <button *ngIf="this.authService.currentUser.isUser" mat-menu-item (click)="del()">
+        <mat-icon>remove_circle_outline</mat-icon>
+        <span>حذف</span>
+      </button>
+      <button *ngIf="!this.authService.currentUser.isUser" mat-menu-item (click)="confirm()">
+        <mat-icon>check</mat-icon>
+        <span>تایید</span>
+      </button>
+      <button *ngIf="!this.authService.currentUser.isUser" mat-menu-item (click)="reject()">
+        <mat-icon>close</mat-icon>
+        <span>رد</span>
+      </button>
+
+      
+    </mat-menu>
+    
   </mat-toolbar>
   <mat-card class="my-card" >
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"  [dir]="direction">

@@ -10,7 +10,12 @@
   text-align: justify;
   padding: 5%;
   direction: rtl;
-  background-image: url(/assets/bg.jpg);
+  //background-image: url(/assets/bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.center {
+  text-align: center;
+  font-weight: bold;
 }

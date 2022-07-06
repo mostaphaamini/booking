@@ -36,10 +36,22 @@ export class Member {
     experienced!: number;
     exLast: string = '';
     exNum!: number;
+    experienced40!: number;
+    ex40Last: string = '';
+    ex40Num!: number;
     pay!: number;
     bank: string = '';
     acount: string = '';
     shaba: string = '';
+    kids!: number;
+    solType!: number;
+    locType!: number;
+    house!: number;
+    phone: string = '';
+    relMobile: string = '';
+    otherTravel: boolean = false;
+    province: string = '';
+    city: string = '';
 
     agentConfirm: boolean = false;
     adminConfirm: boolean = false;

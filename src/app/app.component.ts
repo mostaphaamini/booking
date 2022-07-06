@@ -19,6 +19,15 @@ export class AppComponent {
     this.isAuthenticated = this.authService.isLoggedIn;
   }
   title = 'سامانه ثبت نام زیارتی';
+  agree: boolean = false;
+
+  goto(){
+    if(this.authService.isLoggedIn){
+      this.router.navigate(['members']);
+    }else{
+      this.router.navigate(['login']);
+    }
+  }
 
   logInOut(){
     if(this.authService.isLoggedIn){

@@ -6,6 +6,7 @@ import { AuthService } from '../shared/auth.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Member } from '../models/member';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 export interface PeriodicElement {
   id: number;
@@ -29,7 +30,7 @@ export class AgentComponent implements OnInit {
   public direction: Direction;
   dataSource = new MatTableDataSource<Member>(this.ELEMENT_DATA);
   selection = new SelectionModel<Member>(true, []);
-  endpoint: string = 'http://localhost:3000/';
+  endpoint: string = environment.backendUrl;
   
   public constructor(
     private readonly dir: Directionality,

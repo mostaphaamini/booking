@@ -8,12 +8,14 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 
 export class AuthService {
-  endpoint: string = 'http://localhost:3000/auth';
+  endpoint: string = environment.backendUrl+ 'auth';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   constructor(public http: HttpClient, public router: Router) {}
 
@@ -25,15 +27,14 @@ export class AuthService {
 
   // Sign-in
   signIn(user: User) {
-    return this.http
-      .post<any>(`${this.endpoint}/login`, user)
-      .subscribe((res: any) => {
-        localStorage.setItem('access_token', res.access_token);
-        this.getUserProfile().subscribe((res) => {
-          localStorage.setItem('currentUser', JSON.stringify(res));
-          this.router.navigate(['members']);
-        });
+    let api = `${this.endpoint}/login`;
+    return this.http.post<any>(api, user).subscribe((res: any) => {
+      localStorage.setItem('access_token', res.access_token);
+      this.getUserProfile().subscribe((res) => {
+        localStorage.setItem('currentUser', JSON.stringify(res));
+        this.router.navigate(['members']);
       });
+    });
   }
 
   get currentUser(){
@@ -85,7 +86,6 @@ export class AuthService {
 
   // request
   getReq(api: string, params: any): Observable<any> {
-    console.log('in', api);
     return this.http.get(api, { headers: this.headers, params: params }).pipe(
       map((res) => {
         return res || {};
@@ -96,7 +96,6 @@ export class AuthService {
 
   // request
   postReq(api: string, params: any): Observable<any> {
-    console.log('in', api);
     return this.http.post(api, { params: params }).pipe(
       map((res) => {
         return res || {};
@@ -107,6 +106,7 @@ export class AuthService {
 
   // Error
   handleError(error: HttpErrorResponse) {
+    return throwError(() => new Error(msg));
     let msg = '';
     if (error.error instanceof ErrorEvent) {
       // client-side error
@@ -116,7 +116,7 @@ export class AuthService {
       msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     if (error.status == 401) {
-      //console.log('need login' + this);
+      console.log('need login' + this);
       this.doLogout();
     }
     return throwError(() => new Error(msg));

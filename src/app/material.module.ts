@@ -15,19 +15,22 @@ import { MatTableModule } from '@angular/material/table'
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MaterialJalaliMomentAdapterModule } from 'material-jalali-moment-adapter';
+import {MatMenuModule} from '@angular/material/menu';
 MaterialJalaliMomentAdapterModule
 
 @NgModule({
 imports: [
     MatNativeDateModule,MatDatepickerModule,MatIconModule,MatButtonModule,MatCheckboxModule, 
     MatToolbarModule,FormsModule, MatCardModule,MatFormFieldModule,MatInputModule,MatListModule,
-    MatRadioModule, MatTableModule, MatDialogModule, MatSelectModule, MaterialJalaliMomentAdapterModule
+    MatRadioModule, MatTableModule, MatDialogModule, MatSelectModule, MaterialJalaliMomentAdapterModule,
+    MatMenuModule
 ],
 
 exports: [
     MatNativeDateModule,FormsModule,MatDatepickerModule,MatIconModule,MatButtonModule,
     MatCheckboxModule, MatToolbarModule, MatCardModule,MatFormFieldModule,MatInputModule,
-    MatListModule,MatRadioModule, MatTableModule, MatDialogModule, MatSelectModule, MaterialJalaliMomentAdapterModule
+    MatListModule,MatRadioModule, MatTableModule, MatDialogModule, MatSelectModule, MaterialJalaliMomentAdapterModule,
+    MatMenuModule
 ],
 
 })

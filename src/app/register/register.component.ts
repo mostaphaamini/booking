@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { JalaliMomentDateAdapter, JALALI_MOMENT_FORMATS } from 'material-jalali-moment-adapter';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -34,17 +35,24 @@ import { JalaliMomentDateAdapter, JALALI_MOMENT_FORMATS } from 'material-jalali-
 })
 export class RegisterComponent implements OnInit {
   @Input() id: number = 0;
-  endpoint: string = 'http://localhost:3000/';
+  endpoint: string = environment.backendUrl;
   registerForm: FormGroup;
   mine: boolean = true;
   health: boolean = true;
   gender: number = 1;
+  solType: number = 1;
+  jobType: number = 1;
+  married: number = 1;
+  locType: number = 1;
   vacFileName: string = '';
   solFileName: string = '';
   passFileName: string = '';
   hasPass: boolean = false;
   hasCar: boolean = false;
   hasEx: boolean = false;
+  hasEx40: boolean = false;
+  samah: boolean = false;
+  selfAid: boolean = false;
 
   agents: any[] = [];
 
@@ -95,10 +103,22 @@ export class RegisterComponent implements OnInit {
       experienced: new FormControl(),
       exNum: new FormControl(),
       exLast: new FormControl(),
+      experienced40: new FormControl(),
+      ex40Num: new FormControl(),
+      ex40Last: new FormControl(),
       pay: new FormControl(),
       bank: new FormControl(''),
       acount: new FormControl(''),
       shaba: new FormControl(''),
+      kids: new FormControl(),
+      solType: new FormControl(),
+      house: new FormControl(),
+      locType: new FormControl(),
+      phone: new FormControl(''),
+      relMobile: new FormControl(''),
+      otherTravel: new FormControl(),
+      province: new FormControl(''),
+      city: new FormControl(''),
     }); 
   }
 
@@ -113,9 +133,14 @@ export class RegisterComponent implements OnInit {
         this.solFileName = res.solFileName || '';
         this.passFileName = res.passFileName || '';
         this.gender = res.gender;
+        this.solType = res.solType;
+        this.jobType = res.job;
+        this.married = res.married;
+        this.locType = res.locType;
         this.hasPass = res.hasPass;
         this.hasCar = res.car == 1;
         this.hasEx = res.experienced == 1;
+        this.hasEx40 = res.experienced40 == 1;
         
         this.registerForm = this.fb.group(res);
       }else{
@@ -129,11 +154,32 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  calculateDiff(dateSent: any){
+    let currentDate = new Date();
+    //console.log('ffff ' + currentDate);
+    dateSent = new Date(dateSent);
+    //console.log('ffff ' + dateSent);
+    return Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(dateSent.getFullYear(), dateSent.getMonth(), dateSent.getDate()) ) /(1000 * 60 * 60 * 24 * 365));
+  }
+
+  checkAge(){
+    let age = this.calculateDiff(this.registerForm.value.bDate);
+    if(this.registerForm.value.gender == 2 && this.registerForm.value.married == 1 
+      && age < 50){
+      let msg = 'متاسفانه امکان تشرف خواهران مجرد زیر ۵۰ سال فعلا از طریق این سامانه محیا نمی باشد';
+      const dialogRef = this.dialog.open(AlertDialog, {data: msg});
+      return false;
+    }
+    return true 
+  }
+
   register() {
-    console.log('clicked');
+    if(!this.checkAge()){
+      return;
+    }
     let api = `${this.endpoint}auth/saveMember`;
     this.authService.postReq(api, this.registerForm.value).subscribe((res) => {
-      console.log(res);
+      const dialogRef = this.dialog.open(AlertDialog, {data: 'اطلاعات ذخیره شد'});
     });
   }
 
@@ -144,6 +190,29 @@ export class RegisterComponent implements OnInit {
 
   genderChange(sel: any){
     this.gender = sel.value;
+    this.checkAge();
+  }
+
+  solChange(sel: any){
+    this.solType = sel.value;
+  }
+
+  jobChange(sel: any){
+    this.jobType = sel.value;
+  }
+
+  aidChange(sel: any){
+    this.selfAid = sel;
+  }
+
+  marriedChange(sel: any){
+    this.married = sel.value;
+    this.checkAge();
+  }
+
+  locChange(sel: any){
+    this.locType = sel.value;
+    console.log(this.locChange);
   }
 
   healthChange(sel: any){
@@ -160,6 +229,10 @@ export class RegisterComponent implements OnInit {
 
   exChange(sel: any){
     this.hasEx = sel.value == 1;
+  }
+
+  ex40Change(sel: any){
+    this.hasEx40 = sel.value == 1;
   }
 
   onVacFileSelected(event: any) {
