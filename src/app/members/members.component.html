@@ -12,6 +12,10 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+      <button *ngIf="this.authService.currentUser.isUser" mat-menu-item (click)="addUser()">
+        <mat-icon>person_add</mat-icon>
+        <span>ثبت نام جدید</span>
+      </button>
       <button mat-menu-item (click)="showIt()">
         <mat-icon>visibility</mat-icon>
         <span>ویرایش اطلاعات</span>
@@ -19,10 +23,6 @@
       <button mat-menu-item (click)="getAllMembers()">
         <mat-icon>refresh</mat-icon>
         <span>بازیابی</span>
-      </button>
-      <button *ngIf="this.authService.currentUser.isUser" mat-menu-item (click)="addUser()">
-        <mat-icon>person_add</mat-icon>
-        <span>افزودن</span>
       </button>
       <button *ngIf="this.authService.currentUser.isUser" mat-menu-item (click)="del()">
         <mat-icon>remove_circle_outline</mat-icon>
@@ -71,6 +71,18 @@
         </ng-container>
       
         <!-- Name Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef> کاربر </th>
+          <td mat-cell *matCellDef="let element"> {{element.user.userName}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="password">
+          <th mat-header-cell *matHeaderCellDef> کد ملی </th>
+          <td mat-cell *matCellDef="let element"> {{element.user.password}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
         <ng-container matColumnDef="fName">
           <th mat-header-cell *matHeaderCellDef> نام </th>
           <td mat-cell *matCellDef="let element"> {{element.fName}} </td>
@@ -80,6 +92,12 @@
         <ng-container matColumnDef="lName">
           <th mat-header-cell *matHeaderCellDef> نام خانوادگی </th>
           <td mat-cell *matCellDef="let element"> {{element.lName}} </td>
+        </ng-container>
+ 
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> معرف </th>
+          <td mat-cell *matCellDef="let element"> {{element.agent && element.agent.name}} </td>
         </ng-container>
 
         <!-- Weight Column -->

@@ -3,23 +3,25 @@
   </mat-toolbar>
   <mat-card class="my-card">
     
-    <div class="my-form" style="text-align:justify; text-shadow: -3px 2px 4px white; direction: rtl;" >
+    <div *ngIf="this.authService.currentUser.isUser" class="my-form" style="text-align:justify; text-shadow: -3px 2px 4px white; direction: rtl;" >
         <p style="text-align:center;">بسم الله الرحمن الرحیم</p>
         <p style="text-align:center;">اللهم صل علی محمد و آل محمد و عجل فرجهم والعن اعدائهم اجمعین</p>
         <p>متقاضی محترم<br>
             لطفاً:<br>
             1-تا پایان فرم ثبت نام، به  همه ی سؤالات با دقت و به صورت کامل پاسخ دهید.<br>
-            2- چنانچه گذرنامه ندارید و یا دُز دوم واکسن کرونا را تزریق نکرده اید، تا تاریخ 10 مرداد 1401  به شما فرصت داده می شود تا با مراجعه مجدّد به همین سایت و گزینه ی ویرایش اطلاعات؛ نسبت به بارگزاری:<br>
+            2- چنانچه گذرنامه ندارید و یا دُز دوم واکسن کرونا را تزریق نکرده اید، تا تاریخ ۲۰ مرداد ۱۴۰۱  به شما فرصت داده می شود تا با مراجعه مجدّد به همین سایت و گزینه ی ویرایش اطلاعات؛ نسبت به بارگزاری:<br>
             الف) اطلاعات مربوط به گذرنامه ی خود<br>
             ب) دُز دوم واکسن کرونا<br>
              اقدام فرمایید؛  بدیهی است وارد نمودن سایر اطلاعات درخواستی فرم ثبت نام، هم اکنون ضروری است.<br>
-            3- پس از وارد کردن همه ی اطلاعات درخواستی بعلاوه ی موارد مربوط به گذرنامه و کارت واکسن دُز دوم کرونا، و  تأیید  نهایی به شما کد رهگیری داده خواهد شد که حفظ آن ضروری است.<br>
-            توجه: ارسال کد رهگیری هیچ حقی برای اعزام شخص متقاضی ایجاد نکرده و صرفاً پس از تأیید صحت اطلاعات متقاضی، جهت اعزام قطعی، به شما اطلاع رسانی خواهد شد.<br>
-            ضمناً استثنائاً وجه تقدیمی بابت تدارک گذرنامه منوط به دریافت کد رهگیری نمی باشد و در صورت تأیید صحت اطلاعات وارد شده، فقط وجه مربوط به تدارک گذرنامه تقدیم خواهد شد.</p>
+            3- پس از وارد کردن همه ی اطلاعات درخواستی بعلاوه ی موارد مربوط به گذرنامه و کارت واکسن دُز دوم کرونا، و  تأیید نهایی به شما اطلاع رسانی خواهد شد.<br>
+            توجه: اطلاع رسانی به حضرت عالی هیچ حقی برای اعزام شخص متقاضی ایجاد نکرده و صرفاً پس از تأیید صحت اطلاعات متقاضی، جهت اعزام قطعی، به شما اطلاع رسانی خواهد شد.<br>
+            ضمناً استثنائاً وجه تقدیمی بابت تدارک گذرنامه منوط به اطلاع رسانی قطعی نمی باشد و در صورت تأیید صحت اطلاعات وارد شده، فقط وجه مربوط به تدارک گذرنامه تقدیم خواهد شد.</p>
+            <br>
+            <mat-checkbox class="example-margin" [(ngModel)]="samah"><p style="margin: 0px 4px 4px 0px;">در سامانه سماح ثبت نام کرده ام</p></mat-checkbox>
     </div>
-    <mat-checkbox class="example-margin" [(ngModel)]="samah"><p style="margin: 0px 4px 4px 0px;">در سامانه سماح ثبت نام کرده ام</p></mat-checkbox>
+    
 
-   <form *ngIf="this.samah" class="my-form" [formGroup]="registerForm" (ngSubmit)="register()">
+   <form *ngIf="this.samah || !this.authService.currentUser.isUser" class="my-form" [formGroup]="registerForm" (ngSubmit)="register()">
      <mat-card-content>
         <mat-form-field class="full-width rtl">
             <mat-label>رابطه</mat-label>
@@ -27,12 +29,13 @@
                 <mat-select formControlName="relation" required (selectionChange)="relationChange($event)">
                     <mat-option [value]="1">خودم</mat-option>
                     <mat-option [value]="2">همسرم</mat-option>
-                    <mat-option [value]="2">فرزند</mat-option>
-                    <mat-option [value]="2">والدین</mat-option>
+                    <mat-option [value]="3">فرزند</mat-option>
+                    <mat-option [value]="4">والدین</mat-option>
+                    <mat-option [value]="5">سایر</mat-option>
                 </mat-select>
             </div>
          </mat-form-field>
-        <mat-form-field class="full-width rtl" *ngIf="this.mine"> 
+        <mat-form-field class="full-width rtl"> 
             <mat-label>معرف</mat-label>
             <div class="form-group">
                 <mat-select formControlName="agentId" required>
@@ -60,7 +63,7 @@
          <mat-form-field class="full-width rtl">
             <mat-label>کد ملی</mat-label>
             <div class="form-group">
-                <input  matInput class="form-control ltr" formControlName="nID" required >
+                <input  matInput class="form-control ltr" formControlName="nID" required maxlength="10" minlength="10">
             </div>
          </mat-form-field>
 
@@ -80,7 +83,7 @@
 
          <mat-form-field  class="rtl">
             <mat-label>تاريخ تولد</mat-label>
-            <input  class="ltr" matInput [matDatepicker]="simplePicker" mask="yyyy/mm/dd" placeholder="13--/--/--" formControlName="bDate" >
+            <input  class="ltr" matInput [matDatepicker]="simplePicker" mask="yyyy/mm/dd" placeholder="13--/--/--" formControlName="bDate" required>
             <!-- <mat-datepicker-toggle matSuffix [for]="simplePicker"></mat-datepicker-toggle> -->
             <mat-datepicker #simplePicker> </mat-datepicker>
           </mat-form-field>
@@ -126,10 +129,10 @@
          </mat-form-field><br>
 
          <div *ngIf="this.gender == 1" class="rtl">
-            <mat-label>کارت پایان خدمت یا معافیت یا اشتغال به تحصیل</mat-label>
+            <mat-label>کارت پایان خدمت یا معافیت یا اشتغال به تحصیل *</mat-label>
             <div class="form-group">
                 <button type="button" mat-raised-button (click)="fileInput.click()">انتخاب فایل</button>
-                <input hidden (change)="onSolFileSelected($event)" #fileInput type="file" id="solFile">
+                <input hidden (change)="onSolFileSelected($event)" #fileInput type="file" id="solFile" required>
             </div>
             <img *ngIf="this.solFileName.length > 0" src="{{ endpoint }}{{ solFileName }}" style="width: 100px;">
          </div>
@@ -168,9 +171,9 @@
             </div>
          </mat-form-field> -->
 
-         <mat-form-field  class="rtl" *ngIf="this.hasPass">
-            <mat-label>تاريخ اعتبار گذرنامه</mat-label>
-            <input  class="ltr" matInput [matDatepicker]="simplePicker2" mask="yyyy/mm/dd" placeholder="14--/--/--" formControlName="pDate" >
+         <mat-form-field  class="full-width rtl" *ngIf="this.hasPass">
+            <mat-label>تاريخ انقضای گذرنامه  (تاریخ شمسی قید گردد)</mat-label>
+            <input  class="ltr" matInput [matDatepicker]="simplePicker2" mask="yyyy/mm/dd" placeholder="14--/--/--" formControlName="pDate" required>
             <!-- <mat-datepicker-toggle matSuffix [for]="simplePicker"></mat-datepicker-toggle> -->
             <mat-datepicker #simplePicker2> </mat-datepicker>
           </mat-form-field>
@@ -179,7 +182,7 @@
          <mat-form-field class="full-width rtl" *ngIf="this.hasPass">
             <mat-label>شماره گذرنامه</mat-label>
             <div class="form-group">
-                <input matInput class="form-control" formControlName="pID" required>
+                <input matInput class="form-control" formControlName="pID" required placeholder="---------" maxlength="9" minlength="9">
             </div>
          </mat-form-field>
 
@@ -199,7 +202,7 @@
                 <mat-select formControlName="religion" required>
                     <mat-option [value]="1">شیعه اثنی عشری</mat-option>
                     <mat-option [value]="2">اهل سنت</mat-option>
-                    <mat-option [value]="2">سایر مذاهب</mat-option>
+                    <mat-option [value]="3">سایر مذاهب</mat-option>
                 </mat-select>
             </div>
          </mat-form-field>
@@ -220,9 +223,9 @@
                 <mat-select formControlName="house" required>
                     <mat-option [value]="1">شخصی</mat-option>
                     <mat-option [value]="2">استیجاری</mat-option>
-                    <mat-option [value]="2">خانه پدری</mat-option>
-                    <mat-option [value]="2">مسکن طلاب</mat-option>
-                    <mat-option [value]="2">سکونت رایگان توسط خیرین</mat-option>
+                    <mat-option [value]="3">خانه پدری</mat-option>
+                    <mat-option [value]="4">مسکن طلاب</mat-option>
+                    <mat-option [value]="5">سکونت رایگان توسط خیرین</mat-option>
                 </mat-select>
             </div>
          </mat-form-field>
@@ -251,7 +254,7 @@
          <mat-form-field class="full-width rtl" *ngIf="this.mine">
             <mat-label>کد پستی</mat-label>
             <div class="form-group">
-                <input matInput class="form-control" formControlName="postalCode">
+                <input matInput class="form-control" formControlName="postalCode" maxlength="10" minlength="10">
             </div>
          </mat-form-field>
 
@@ -265,7 +268,7 @@
          <mat-form-field class="full-width rtl" *ngIf="this.mine">
             <mat-label>تلفن همراه یک نفر از نزدیکان تا بتوان در موارد اضطراری با ایشان تماس گرفته شود</mat-label>
             <div class="form-group">
-                <input matInput class="form-control" formControlName="relMobile">
+                <input matInput class="form-control" formControlName="relMobile" required>
             </div>
          </mat-form-field>
 
@@ -351,8 +354,8 @@
             <mat-select formControlName="earn" required>
                 <mat-option [value]="1">صرفاً از محل دریافت یارانه</mat-option>
                 <mat-option [value]="2">صرفاً از محل دریافت یارانه ها و کمک های نهاد های حمایتی</mat-option>
-                <mat-option [value]="2">خودم شاغل هستم</mat-option>
-                <mat-option [value]="2">خودم و یک یا چند نفر از افراد  خانواده شاغل هستیم</mat-option>
+                <mat-option [value]="3">خودم شاغل هستم</mat-option>
+                <mat-option [value]="4">خودم و یک یا چند نفر از افراد  خانواده شاغل هستیم</mat-option>
             </mat-select>
          </mat-form-field>
 
@@ -483,7 +486,7 @@
          <mat-form-field class="full-width rtl" *ngIf="this.mine">
             <mat-label>شناسه شبا</mat-label>
             <div class="form-group">
-                <input matInput id="shaba" class="form-control ltr" formControlName="shaba" required minlength="26" placeholder="IR-----------------------">
+                <input matInput id="shaba" class="form-control ltr" formControlName="shaba" required minlength="26" maxlength="26" placeholder="IR-----------------------">
             </div>
          </mat-form-field>
 

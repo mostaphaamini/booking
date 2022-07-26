@@ -18,7 +18,7 @@ export class MembersComponent implements OnInit {
 
   ELEMENT_DATA: Member[] = [];
 
-  displayedColumns: string[] = ['select', 'position', 'fName', 'lName', 'agentConfirm', 'adminConfirm', 'superAdminConfirm'];
+  displayedColumns: string[] = ['select', 'position', 'username', 'fName', 'lName', 'name', 'agentConfirm', 'adminConfirm', 'superAdminConfirm'];
   public direction: Direction;
   dataSource = new MatTableDataSource<Member>(this.ELEMENT_DATA);
   selection = new SelectionModel<Member>(true, []);
@@ -104,7 +104,9 @@ export class MembersComponent implements OnInit {
           api = `${this.endpoint}auth/superAdminConfirm`;
         } 
         this.authService.postReq(api, params).subscribe((res) => {
-          this.getAllMembers();
+          setTimeout(() => {
+            this.getAllMembers();
+         }, 1000);
         });
       }else{
         console.log(2);
@@ -120,7 +122,7 @@ export class MembersComponent implements OnInit {
         let api = `${this.endpoint}auth/addMember`;
         this.authService.postReq(api, {}).subscribe((res) => {
           if(res){
-            this.router.navigate(['/register', { id: res }]);
+            this.router.navigate(['/register', { id: res.id }]);
           }
         });
       }

@@ -7,13 +7,15 @@
          <mat-form-field class="full-width">
             <mat-label>شماره همراه</mat-label>
             <div class="form-group">
-            <input  matInput class="form-control" placeholder="شماره همراه" formControlName="username" required>
+            <input  matInput class="form-control" placeholder="شماره همراه" formControlName="username" required maxlength="11" minlength="11" >
+            <p *ngIf="this.username && this.username.errors && this.username.errors.pattern" class="text-danger">لطفا شماره همراه را با حروف انگلیسی وارد نمایید</p>
             </div>
          </mat-form-field>
          <mat-form-field class="full-width">
             <mat-label>کد ملی</mat-label>
             <div class="form-group">
-            <input matInput class="form-control" placeholder="کد ملی" formControlName="password" required>
+            <input matInput class="form-control" placeholder="کد ملی" formControlName="password" required maxlength="10" minlength="10">
+            <p *ngIf="this.password && this.password.errors && this.password.errors.pattern" class="text-danger">لطفا کد ملی را با حروف انگلیسی وارد نمایید</p>
          </div>
          </mat-form-field>
      </mat-card-content>

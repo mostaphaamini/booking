@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export class Member {
     id!: number;
     relation!:number
@@ -52,6 +54,8 @@ export class Member {
     otherTravel: boolean = false;
     province: string = '';
     city: string = '';
+    user!: User;
+    agent!: User;
 
     agentConfirm: boolean = false;
     adminConfirm: boolean = false;

@@ -164,7 +164,7 @@ export class RegisterComponent implements OnInit {
 
   checkAge(){
     let age = this.calculateDiff(this.registerForm.value.bDate);
-    if(this.registerForm.value.gender == 2 && this.registerForm.value.married == 1 
+    if(this.mine && this.registerForm.value.gender == 2 && this.registerForm.value.married == 1 
       && age < 50){
       let msg = 'متاسفانه امکان تشرف خواهران مجرد زیر ۵۰ سال فعلا از طریق این سامانه محیا نمی باشد';
       const dialogRef = this.dialog.open(AlertDialog, {data: msg});
@@ -185,7 +185,7 @@ export class RegisterComponent implements OnInit {
 
   relationChange(sel: any){
     console.log(sel.value);
-    this.mine = sel.value == 1;
+    this.mine = (sel.value == 1 || sel.value == 5);
   }
 
   genderChange(sel: any){

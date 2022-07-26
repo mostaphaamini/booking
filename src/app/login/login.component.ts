@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
 import { Router } from '@angular/router';
 import { AlertDialog } from '../agent/agent.component';
@@ -14,15 +14,33 @@ import { environment } from 'src/environments/environment';
 export class LoginComponent implements OnInit {
   endpoint: string = environment.backendUrl;
   signinForm: FormGroup;
+  username: any;
+  password: any;
+  
   constructor(
     public fb: FormBuilder,
     public authService: AuthService,
     public router: Router,
     private dialog: MatDialog,
   ) {
+
+    this.username = new FormControl('', [
+      Validators.required,
+      Validators.pattern("^[0-9]*$"),
+      Validators.minLength(11),
+      Validators.maxLength(11),
+    ]);
+
+    this.password = new FormControl('', [
+      Validators.required,
+      Validators.pattern("^[0-9]*$"),
+      Validators.minLength(10),
+      Validators.maxLength(10),
+    ]);
+    
     this.signinForm = this.fb.group({
-      username: new FormControl(''),
-      password: new FormControl(''),
+      username: this.username ,
+      password: this.password,
     });
   }
 
@@ -35,6 +53,10 @@ export class LoginComponent implements OnInit {
     }
     if(!this.signinForm.value.password){
       const dialogRef = this.dialog.open(AlertDialog, {data: 'لطفا کلمه عبور را وارد نمایید'});
+      return;
+    }
+    if(!this.signinForm.valid){
+      const dialogRef = this.dialog.open(AlertDialog, {data: 'اطلاعات وارد شده صحیح نمی باشد'});
       return;
     }
 
